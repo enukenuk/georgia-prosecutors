@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.map-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.state {
+    fill: none;
+    stroke: #333333;
+    stroke-width: 2;
+}
+
+.county {
+    fill: #e6f2ff;
+    stroke: #4a90e2;
+    stroke-width: 0.5;
+}
+
+.county:hover {
+    fill: #cce7ff;
+}
+
+.county.selected {
+    fill: #ff6b6b;
+    stroke: #d63031;
+    stroke-width: 1.5;
+}
+
+.county-info {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.county-info h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.county-info p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.reset-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.reset-button:hover {
+    background-color: #357abd;
+}

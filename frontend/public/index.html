@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Georgia Prosecutors Map</title>
+    <link rel="stylesheet" href="../src/styles/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Georgia Prosecutors Map</h1>
+        <div class="map-layout">
+            <div class="map-container">
+                <svg id="map"></svg>
+            </div>
+            <div id="county-info" class="county-info">
+                <h3>Prosecutor Information</h3>
+                <p>Click on a county to see the prosecutors you have available.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../src/app.js"></script>
+</body>
+</html>

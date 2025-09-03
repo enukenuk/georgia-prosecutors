@@ -1,10 +1,12 @@
-# backend/app/main.py
-
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, APIRouter
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 import logging
+
+from starlette.middleware.cors import CORSMiddleware
 
 from .database import get_db, wait_for_db
 from .services.person_service import PersonService
@@ -32,7 +34,24 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-@app.get("/health")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.mount("/static", StaticFiles(directory="./frontend/public/"), name="static")
+app.mount('/src', StaticFiles(directory="./frontend/src/"), name="src")
+
+@app.get("/")
+async def serve_map():
+    return FileResponse("./frontend/public/index.html")
+
+api_router = APIRouter(prefix="/api")
+
+@api_router.get("/health")
 def health_check(db: Session = Depends(get_db)):
     try:
         # Test database connection
@@ -47,7 +66,7 @@ def health_check(db: Session = Depends(get_db)):
         logger.error(f"Health check failed: {e}")
         raise HTTPException(status_code=503, detail=f"Database connection failed: {str(e)}")
 
-@app.get("/people/{person_id}")
+@api_router.get("/people/{person_id}")
 def get_person(person_id: int, db: Session = Depends(get_db)):
     try:
         person_service = PersonService(db)
@@ -59,7 +78,7 @@ def get_person(person_id: int, db: Session = Depends(get_db)):
         logger.error(f"Error getting person {person_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/counties/{county_id}/people")
+@api_router.get("/counties/{county_id}/people")
 def get_people_by_county(county_id: str, db: Session = Depends(get_db)):
     try:
         person_service = PersonService(db)
@@ -68,7 +87,7 @@ def get_people_by_county(county_id: str, db: Session = Depends(get_db)):
         logger.error(f"Error getting people for county {county_id}: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/people/search")
+@api_router.get("/people/search")
 def search_people(name: str, db: Session = Depends(get_db)):
     try:
         person_service = PersonService(db)
@@ -76,3 +95,5 @@ def search_people(name: str, db: Session = Depends(get_db)):
     except Exception as e:
         logger.error(f"Error searching people with name '{name}': {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+app.include_router(api_router)
